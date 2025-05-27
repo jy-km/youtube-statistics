@@ -1,6 +1,6 @@
 from googleapiclient.discovery import build
 
-api_key = 'AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk'
+api_key = 'PASS_KEY_HERE'
 youtube = build('youtube', 'v3', developerKey=api_key)
 
 video_id = 'I5bLsSQE5Dk'
@@ -53,3 +53,22 @@ def channelstats(channel_name):
     print(f"Category: {stats.get('category', 'N/A')}")
 
 # channelstats(channel_name)
+
+
+
+
+search_response = youtube.search().list(
+    q="google",  
+    type="video",
+    part="snippet",
+    order="date",
+    maxResults=10,
+    regionCode="US",
+    videoCategoryId="20",
+    publishedAfter="2020-05-26T00:00:00Z"
+).execute()
+
+for item in search_response['items']:
+    print(f"title: {item['snippet']['title']}")
+    print(f"date: {item['snippet']['publishedAt']}")
+    # print(f"item['id']['videoId'])

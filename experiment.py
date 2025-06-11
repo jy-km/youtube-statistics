@@ -1,6 +1,6 @@
 from googleapiclient.discovery import build
 
-api_key = 'PASS_KEY_HERE'
+api_key = 'AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk'
 youtube = build('youtube', 'v3', developerKey=api_key)
 
 video_id = 'I5bLsSQE5Dk'
@@ -23,7 +23,7 @@ def videostats(video_id):
     print(f"Comments: {stats.get('commentCount', 'N/A')}")
     print(f"Category: {stats.get('category', 'N/A')}")
 
-videostats(video_id)
+# videostats(video_id)
 
 def channelstats(channel_name):
     search_response = youtube.search().list(
@@ -58,17 +58,27 @@ def channelstats(channel_name):
 
 
 search_response = youtube.search().list(
-    q="google",  
+    q="",  
     type="video",
     part="snippet",
     order="date",
     maxResults=10,
-    regionCode="US",
-    videoCategoryId="20",
-    publishedAfter="2020-05-26T00:00:00Z"
-).execute()
+    # regionCode="US",    
+    videoCategoryId="26",
+    publishedBefore="2025-05-10T00:00:00Z" #change date when conducting experiment
+    ).execute()
 
 for item in search_response['items']:
     print(f"title: {item['snippet']['title']}")
     print(f"date: {item['snippet']['publishedAt']}")
+    print(f"channel: {item['snippet']['channelTitle']}")
     # print(f"item['id']['videoId'])
+
+"""
+1.generate list of keywords (100 or more) for every category that youtube supports
+2. use this code to get title and date of the video to look up the URL/ any other way to specify video
+3. use specified video to look up statistics (views, likes, etc)
+4. exporting into excel spreadsheet
+
+studying more popular videos so it is more useful and relevant, more impact to popular and wannabe youtubers
+"""

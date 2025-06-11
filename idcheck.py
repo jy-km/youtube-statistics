@@ -20,3 +20,6 @@ def check_thumbnail(width):
     else:
         return True
 
+"""either develop experiement by topic or brute force random id generation
+
+"""

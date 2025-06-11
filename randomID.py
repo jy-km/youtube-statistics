@@ -12,6 +12,20 @@ categoryId	Category
 27	Education
 28	Science & Tech
 """
+
+"""
+categoryId	Category
+1	Film & Animation 
+20	Gaming #overly full of esports
+22	People & Blogs 
+23	Comedy
+24	Entertainment
+25	News & Politics
+26	Howto & Style
+27	Education #has many religion related videos
+28	Science & Tech
+"""
+
 import random #importing module necessary for code generation
 
 def generateid(length, chars): #generates id based on its length and the possible characters

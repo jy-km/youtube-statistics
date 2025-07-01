@@ -1,6 +1,7 @@
 from randomquery import randomquery
 
 #dictionary of youtube video categories
+#categoryID : category name
 category = {1 : "FilmAnimation",
 2 : "AutosVehicles", 
 10:	"Music",

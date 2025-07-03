@@ -1,29 +1,27 @@
 from googleapiclient.discovery import build
 import isodate # type: ignore
-from export import export
+from datetime import datetime
 #youtube API setup with key and youtube variable
 youtube_api_key = 'AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk'
 youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
 #query search function
-def randomquery(category, categoryID):
+def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):
     print(categoryID, category[categoryID])
     video_data = [] #list with information to export
     videos_with_likes = 0 #current number of videos with a valid amount of likes
     max_videos_wanted = 50 #our target number
-
+    
     search_response = youtube.search().list(
         q="a", #random character "a" added to keep the videos in english (or any other language that uses latin alphabet)
         type="video", #initializing search type
         part="snippet",
         order="date", #sorting by date
-        maxResults=50, #youtube API max is 50 per request
+        maxResults=requestnum, #youtube API max is 50 per request
         videoCategoryId=categoryID,
-        publishedBefore="2022-05-16T00:00:00Z"
+        publishedBefore=publishedbefore
     ).execute()
-#        publishedBefore="2025-05-16T00:00:00Z"
-#        publishedBefore="2025-04-16T00:00:00Z"
-#        publishedBefore="2024-05-16T00:00:00Z"
+
 
     for item in search_response['items']:
         # stop if enough videos with likes
@@ -52,6 +50,11 @@ def randomquery(category, categoryID):
         if likes != 'N/A':
             duration = isodate.parse_duration(length) #changing video length from ISO8601 to normal date type
 
+            #parsing date
+            date_dt = datetime.strptime(extracteddate, "%Y-%m-%d")
+            published_dt = datetime.strptime(date,"%Y-%m-%dT%H:%M:%SZ")
+            datediff = (date_dt - published_dt).days
+            """
             print(f"Title: {title}") #printing data out for double check
             print(f"Date: {date}")
             print(f"Views: {views}")
@@ -59,9 +62,24 @@ def randomquery(category, categoryID):
             print(f"Comments: {comments}")
             print(f"Video ID: {video_id}")
             print(f"Duration: {duration}")
+            print(f"Diff: {datediff}")
             print()
             print("-----------------------")
+            """
             
-            video_data.append([title, date, views, likes, comments, duration, video_id]) #appending to export list
+            #appending to export list
+            try:
+                LTV = int(likes) / int(views)
+                CTL = int(comments) / int(likes)
+            except (ValueError, ZeroDivisionError):
+                LTV = "N/A"
+                CTL = "N/A"
+                                
+            video_data.append([
+    title, date, views, likes, comments, category[categoryID], duration, video_id, publishedbefore,
+    LTV, CTL, (datediff)
+    ])
+            
             videos_with_likes += 1 #updating amount of videos with valid likes
-    export(video_data,category,categoryID) #calling on export file each time randomquery runs 
+    print(f"Total videos exported: {len(video_data)}")
+    return video_data

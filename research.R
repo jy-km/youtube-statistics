@@ -17,82 +17,113 @@ onemonth <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/youtube_da
 oneyear <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/youtube_data_oneyear.csv")
 threeyears <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/youtube_data_threeyears.csv")
 combined <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/youtube_data_6_28.csv")
-#LIKES TO VIEWS VS NUMBER OF VIEWS
-ltv_views <- function(data, timeframe){
-  data$Views <- as.numeric(data$Views)
-  data$LTV <- as.numeric(data$LTV)
-  
-  data$LTV_bins <- cut(data$LTV, breaks = 10, include.lowest = TRUE) 
-  binned_data <- data %>%
-    group_by(LTV_bins) %>%
-    summarise(Total_Views = sum(as.numeric(as.character(Views)), na.rm = TRUE))
-  
-  return(ggplot(binned_data, aes(x=LTV_bins, y=Total_Views)) + 
-           geom_bar(stat = "identity", fill = "black") + 
-           scale_y_log10(labels = comma_format()) +
-           xlab("Likes-to-Views Ratio") + 
-           ylab("Total Views") +
-           ggtitle(paste("Comparison between Total Views and LTV Ratio -", timeframe)))
-}
-plot_1day <- ltv_views(oneday, "1 Day")
-plot_1month <- ltv_views(onemonth, "1 Month")
-plot_1year <- ltv_views(oneyear, "1 Year") 
-plot_3years <- ltv_views(threeyears, "3 Years")
 
-plot_1day
-plot_1month
-plot_1year
-plot_3years
+summary(combined)
+ggplot(combined, aes(x = LTV)) +
+  geom_histogram(binwidth = 0.01, fill = "black", color = "black") +
+  labs(title = "Histogram of Like-to-View Ratio (LTV)", x = "LTV", y = "Count")
 
-#LTV RATIO VS VIDEO AGE
-ltv_age <- function(data, timeframe, days) {
-  data$Diff <- as.numeric(as.character(data$Diff))
-  data$adjusted_days <- data$Diff - days  # Create the variable you're using in aes()
-  
-  data_filtered <- data[data$adjusted_days >= 0, ]
+summary(combined$Views)
 
-  ggplot(data_filtered, aes(x = adjusted_days, y = LTV)) +  # Use filtered data
-    geom_point(alpha = 0.6, size = 1.5) +
-    geom_smooth(method = "lm", se = TRUE, color = "red") +
-    labs(
-      title = paste("Video Age vs LTV Ratio -", timeframe),
-      x = "Days Since Video Publication",
-      y = "Likes-to-Views Ratio",
-    )
-}
-plot_1day <- ltv_age(oneday, "1 Day", 0)
-plot_1month <- ltv_age(onemonth, "1 Month", 33)
-plot_1year <- ltv_age(oneyear, "1 Year", 365) 
-plot_3years <- ltv_age(threeyears, "3 Years", 365*3)
+#Views Filtered
+combined %>%
+  filter(Views <= 1e6) %>%
+  ggplot(aes(x = Views)) +
+  geom_histogram(binwidth = 10000, color = "black", fill = "skyblue") +
+  scale_x_continuous(labels = scales::comma) +
+  labs(title = "Views Distribution (Under 1M)", x = "Views", y = "Count") +
+  theme_minimal()
 
-plot_1day
-plot_1month
-plot_1year
-plot_3years
+#LTV vs views
+combined %>%
+  filter(Views <= 1e6, LTV <= 20) %>%
+  ggplot(aes(x = Views, y = LTV)) +
+  geom_point(alpha = 0.5, color = "darkgreen") +
+  labs(title = "LTV vs Views (Filtered)", x = "Views", y = "LTV") +
+  scale_x_continuous(labels = scales::comma) +
+  theme_minimal()
 
-# LTV ratio vs. #comments, whole and by category
-ltv_comments <- function(data, timeframe, days) {
-  data$Diff <- as.numeric(as.character(data$Diff))
-  data$adjusted_days <- data$Diff - days  # Create the variable you're using in aes()
-  
-  data_filtered <- data[data$adjusted_days >= 0, ]
-  
-  ggplot(data_filtered, aes(x = adjusted_days, y = LTV)) +  # Use filtered data
-    geom_point(alpha = 0.6, size = 1.5) +
-    geom_smooth(method = "lm", se = TRUE, color = "red") +
-    labs(
-      title = paste("Video Age vs LTV Ratio -", timeframe),
-      x = "Days Since Video Publication",
-      y = "Likes-to-Views Ratio",
-    )
-}
-plot_1day <- ltv_comments(oneday, "1 Day", 0)
-plot_1month <- ltv_age(onemonth, "1 Month", 33)
-plot_1year <- ltv_age(oneyear, "1 Year", 365) 
-plot_3years <- ltv_age(threeyears, "3 Years", 365*3)
+#LTV vs comments
+combined %>%
+  ggplot(aes(x = Comments, y = LTV)) +
+  geom_histogram(binwidth = 1000, color = "black", alpha = 0.7) +
+  scale_x_continuous(labels = scales::comma) +
+  labs(title = "Comments Distribution by LTV", x = "Comments", y = "Count") +
+  theme_minimal()
+#LTV vs comments filtered
+combined %>%
+  filter(Views <= 1e6, LTV <= 0.5) %>%
+  ggplot(aes(x = Comments, y = LTV)) +
+  geom_histogram(binwidth = 1000, color = "black", alpha = 0.7) +
+  scale_x_continuous(labels = scales::comma) +
+  labs(title = "Comments Distribution by LTV", x = "Comments", y = "LTV") +
+  theme_minimal()
+#LTV vs comments plot
+combined %>%
+  filter(Comments <= 100000, LTV <= 20) %>%
+  ggplot(aes(x = LTV, y = Comments)) +
+  geom_point(alpha = 0.5, color = "darkgreen") +
+  labs(title = "Comments vs LTV (Filtered)", x = "LTV", y = "Comments") +
+  scale_x_continuous(labels = scales::comma) +
+  theme_minimal()
 
-plot_1day
-plot_1month
-plot_1year
-plot_3years
-#LTV ratio vs. #views, whole and by category
+# Categorize Diff into time ranges
+combined <- combined %>% #new bin
+  mutate(TimeGroup = case_when(
+    Diff >= 34 & Diff <= 40 ~ "34-40 days",
+    Diff >= 41 & Diff <= 365 ~ "41-365 days",
+    Diff > 365 & Diff <= 1000 ~ "366-1000 days",
+    Diff > 1000 & Diff <= 1200 ~ "1000-1200 days",
+    TRUE ~ "Other"
+  ))
+
+# Bar graph of average LTV across time groups
+combined %>%
+  group_by(TimeGroup) %>%
+  summarise(Average_LTV = mean(LTV, na.rm = TRUE)) %>%
+  ggplot(aes(x = TimeGroup, y = Average_LTV, fill = TimeGroup)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Average LTV Across Timeframes", x = "Time Group", y = "Average LTV") +
+  theme_minimal()
+
+# Scatter plot of LTV vs Views
+combined %>%
+  filter(Views <= 100000000, LTV <= 100) %>%
+  ggplot(aes(x = LTV, y = Views)) +
+  geom_point(alpha = 0.6, color = "darkblue") +
+  #geom_smooth(method = "lm", se = FALSE, color = "red") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(title = "LTV vs Views", x = "Likes-to-Views Ratio (LTV)", y = "Views") +
+  theme_minimal()
+
+#LTV vs comments across categories (hard)
+category_summary <- combined %>%
+  group_by(Category) %>%
+  summarise(
+    mean_LTV = mean(LTV, na.rm = TRUE),
+    mean_Comments = mean(Comments, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(mean_LTV, mean_Comments), names_to = "Metric", values_to = "Value") %>%
+  mutate(Metric = recode(Metric, mean_LTV = "LTV", mean_Comments = "Comments"))
+
+#plot
+ggplot(category_summary, aes(x = Category, y = Value, fill = Metric)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  scale_fill_manual(values = c("LTV" = "red", "Comments" = "yellow")) +
+  labs(title = "LTV and Comments Across Categories", x = "Category", y = "Average Value", fill = "Metric") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#plot LTV
+ggplot(category_summary, aes(x = Category, y = Value)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(title = "LTV Across Categories", x = "Category", y = "LTV") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#plot Comments
+ggplot(category_summary, aes(x = Category, y = Value)) +
+  geom_bar(stat = "identity", position = "dodge", color = "black") +
+  labs(title = "Comments Across Categories", x = "Category", y = "Comments") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))

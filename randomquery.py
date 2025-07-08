@@ -83,3 +83,4 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):
             videos_with_likes += 1 #updating amount of videos with valid likes
     print(f"Total videos exported: {len(video_data)}")
     return video_data
+    

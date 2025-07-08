@@ -24,10 +24,9 @@ category = {1 : "FilmAnimation",
 totallist = []
 lenlist = []
 for ID in category:
-    temp = randomquery(category, ID,"2021-07-02T00:00:00Z","2025-07-02",3)
-    totallist.append(temp) #date: YYYY-MM-DD format
-    lenlist.append(len(temp))
-    print(len(temp))
+    rq = randomquery(category, ID,"2021-07-03T00:00:00Z","2025-07-03",3)
+    totallist.append(rq) #date: YYYY-MM-DD format
+    lenlist.append(len(rq))
     #2025-07-15 last day to extract data
 export(totallist,lenlist) 
 print(lenlist)

@@ -6,7 +6,7 @@ youtube_api_key = 'AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk'
 youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
 #query search function
-def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):
+def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):#publishedbefore
     print(categoryID, category[categoryID])
     video_data = [] #list with information to export
     videos_with_likes = 0 #current number of videos with a valid amount of likes
@@ -19,6 +19,7 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):
         order="date", #sorting by date
         maxResults=requestnum, #youtube API max is 50 per request
         videoCategoryId=categoryID,
+        # publishedBefore=publishedbefore,
         publishedBefore=publishedbefore
     ).execute()
 
@@ -48,8 +49,10 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):
         length = contentdetails.get('duration', 'N/A')
 
         if likes != 'N/A':
-            duration = isodate.parse_duration(length) #changing video length from ISO8601 to normal date type
-
+            try:
+                duration = isodate.parse_duration(length) #changing video length from ISO8601 to normal date type
+            except (isodate.isoerror.ISO8601Error):
+                break
             #parsing date
             date_dt = datetime.strptime(extracteddate, "%Y-%m-%d")
             published_dt = datetime.strptime(date,"%Y-%m-%dT%H:%M:%SZ")

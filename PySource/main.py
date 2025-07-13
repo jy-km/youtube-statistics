@@ -24,15 +24,23 @@ category = {1 : "FilmAnimation",
 totallist = []
 lenlist = []
 for ID in category:
-    rq = randomquery(category, ID,"2021-07-03T00:00:00Z","2025-07-03",3)
+    rq = randomquery(category, ID,"2025-6-10T00:00:00Z","2025-07-15",40) 
     totallist.append(rq) #date: YYYY-MM-DD format
     lenlist.append(len(rq))
     #2025-07-15 last day to extract data
 export(totallist,lenlist) 
 print(lenlist)
 
+#122 days in 4 months
+"""
+40 samples each 
+First Date: July 15, 2024
 
-#publishedBefore="2022-05-16T00:00:00Z"
-#publishedBefore="2025-05-16T00:00:00Z"
-#publishedBefore="2025-04-16T00:00:00Z"
-#publishedBefore="2024-05-16T00:00:00Z"
+Second Date: November 14, 2024 (122 days after July 15, 2024)
+
+Third Date: March 16, 2025 (122 days after November 14, 2024)
+
+Fourth Date: July 16, 2025 (122 days after March 16, 2025)
+
+END DATE HOWEVER ENDS IN JULY 15 2025
+"""

@@ -35,3 +35,27 @@ category_Comments <- combined %>%
   ) %>%
   pivot_longer(cols = c(median_Comments), names_to = "Metric", values_to = "Value") %>%
   ungroup()
+
+combined <- combined %>% 
+  mutate(CommentsGroup = case_when(
+    Comments >= 0 & Comments <= 1 ~ "0-1 Comments",
+    Comments >= 2 & Comments <= 30 ~ "2-30 Comments",
+    Comments >= 31 & Comments <= 250 ~ "31-250 Comments",
+    Comments >= 251 ~ "251+ Comments",
+    TRUE ~ "Other"
+  ))
+
+combined$CommentsGroup <- factor(combined$CommentsGroup,
+                                 levels = c("0-1 Comments", "2-30 Comments", "31-250 Comments", "251+ Comments","Other"))
+
+combined$ViewsLog <- log10(combined$Views)
+
+combined$LTVLog <- log10(combined$LTV)
+
+combined <- combined %>%
+  filter(Views >= 0, LTV >= 0) %>%
+  mutate(
+    log_Views = log10(Views),
+    log_LTV = log10(LTV)
+  )
+  

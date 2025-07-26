@@ -28,7 +28,6 @@ cor(
   method = "pearson"
 )
 
-
 #Comments vs LTV (overall) 
 t.test(combined$Comments, combined$LTV, var.equal = FALSE)
 
@@ -37,7 +36,6 @@ t.test(
   combined$Comments[combined$Category=="Entertainment"],
   combined$LTV[combined$Category=="Entertainment"]
 )
-
 
 #Views vs Comments (overall)
 t.test(combined$Views, combined$Comments, var.equal = FALSE)

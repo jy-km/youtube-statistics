@@ -54,18 +54,20 @@ combined <- combined %>%
     TRUE ~ "Other"
   ))
 
+combined <- combined %>% 
+  mutate(DiffGroup = case_when(
+    Diff >= 0   & Diff <= 7     ~ "<= 1 week",
+    Diff >= 8   & Diff <= 31    ~ "<= 1 month",
+    Diff >= 32  & Diff <= 365   ~ "<= 1 year",
+    Diff >= 366 & Diff <= 732   ~ "<= 2 years",
+    Diff > 732                  ~ "> 2 years",
+    TRUE                        ~ "Other"
+  ))
+
 combined$CommentsGroup <- factor(combined$CommentsGroup,
                                  levels = c("No Comments", "1-50 Comments", "51+ Comments","Other"))
 
 combined$ViewsLog <- log10(combined$Views)
 
 combined$LTVLog <- log10(combined$LTV)
-
-combined <- combined %>%
-  filter(Views >= 0, LTV >= 0) %>%
-  mutate(
-    log_Views = log10(Views),
-    log_LTV = log10(LTV)
-  )
-
   

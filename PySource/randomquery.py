@@ -1,11 +1,10 @@
 from googleapiclient.discovery import build
 import isodate # type: ignore
 from datetime import datetime
-#youtube API setup with key and youtube variable
+from category import ratio, log10, grouping, diff
 youtube_api_key = 'AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk'
 youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
-#query search function
 def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):#publishedbefore
     print(categoryID, category[categoryID])
     video_data = [] #list with information to export
@@ -53,37 +52,20 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):#
                 duration = isodate.parse_duration(length) #changing video length from ISO8601 to normal date type
             except (isodate.isoerror.ISO8601Error):
                 break
-            #parsing date
-            date_dt = datetime.strptime(extracteddate, "%Y-%m-%d")
-            published_dt = datetime.strptime(date,"%Y-%m-%dT%H:%M:%SZ")
-            datediff = (date_dt - published_dt).days
-            """
-            print(f"Title: {title}") #printing data out for double check
-            print(f"Date: {date}")
-            print(f"Views: {views}")
-            print(f"Likes: {likes}")
-            print(f"Comments: {comments}")
-            print(f"Video ID: {video_id}")
-            print(f"Duration: {duration}")
-            print(f"Diff: {datediff}")
-            print()
-            print("-----------------------")
-            """
-            
-            #appending to export list
-            try:
-                LTV = int(likes) / int(views)
-                CTL = int(comments) / int(likes)
-            except (ValueError, ZeroDivisionError):
-                LTV = "N/A"
-                CTL = "N/A"
-                                
+            durationS = int(duration[0:1]) * 3600 + int(duration[2:4]) * 60 + int(duration[5])
+
+            datediff = diff(datetime, extracteddate,date)
+            newlog = log10(views,likes)
+            newratio = ratio(likes, comments, views)
+            newgroup = grouping(comments,datediff)
+
             video_data.append([
-    title, date, views, likes, comments, category[categoryID], duration, video_id, publishedbefore,
-    LTV, CTL, (datediff)
+    title, date, views, likes, newlog[0], newlog[0],  comments, category[categoryID], durationS, video_id, publishedbefore,
+    newratio[0], newratio[1], datediff, newgroup[0], newgroup[1]
     ])
-            
-            videos_with_likes += 1 #updating amount of videos with valid likes
-    print(f"Total videos exported: {len(video_data)}")
-    return video_data
     
+#['Title', 'Date', 'Views', 'Likes', 'ViewsLog', 'LikesLog', 'Comments','Category','Duration','VideoID','Extracted','LTV','CTL','Diff', 'CommentsGroup', 'DiffGroup']
+
+            videos_with_likes += 1 #updating amount of videos with valid likes
+
+    return video_data

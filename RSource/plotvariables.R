@@ -1,6 +1,6 @@
 #Views Filtered & log-transformed
 combined %>%
-  filter(Views > 0 & Views <= 100000) %>%
+  filter(Views > 0) %>%
   mutate(log_Views = log10(Views)) %>%
   ggplot(aes(x = log_Views)) +
   geom_histogram(binwidth = 0.1, color = "black", fill = "skyblue") +
@@ -14,18 +14,25 @@ combined %>%
   labs(title = "Number of Videos per Comments Group", x = "Comments Group", y = "Number of Videos") +
   theme_minimal()
 
+#LTV by group
+combined %>%
+  ggplot(aes(x = LTVGroup, fill = LTVGroup)) +
+  geom_bar(color = "black") +
+  labs(title = "Number of Videos per LTV Group", x = "LTV Group", y = "Number of Videos") +
+  theme_minimal()
+
 #Comments Filtered and categorialized
 combined %>%
-  filter(Comments <= 1000) %>%
+  filter(Comments <= 10000) %>%
   ggplot(aes(x = Comments)) +
-  geom_histogram(binwidth = 50, color = "black", fill = "skyblue") +
+  geom_histogram(binwidth = 100, color = "black", fill = "skyblue") +
   scale_x_continuous(labels = scales::comma) +
   labs(title = "Comments Distribution", x = "Comments", y = "Count") +
   theme_minimal()
 
 #LTV Filtered & log-transformed
 combined %>%
-  filter(LTV > 0 & LTV <= 100) %>%
+  filter(LTV >= 0 & LTV <= 40) %>%
   ggplot(aes(x = LTV)) +
   geom_histogram(binwidth = 1, color = "black", fill = "skyblue") +
   scale_x_continuous(labels = scales::comma) +
@@ -43,7 +50,7 @@ combined %>%
 #Diff
 combined %>%
   ggplot(aes(x = Diff)) +
-  geom_histogram(binwidth = 10, color = "black", fill = "blue") + 
+  geom_histogram(binwidth = 50, color = "black", fill = "blue") + 
   labs(title = "Video Age Distribution", x = "Video Age", y = "Count") +
   theme_minimal()
 

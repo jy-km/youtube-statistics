@@ -22,7 +22,13 @@ combined %>%
   theme_minimal()
 
 #Views vs LTV , by category
-#Views vs LTV, by video age category 
+cor(
+  combined$log_Views[combined$Views > 0 & combined$LTV > 0 & combined$Category == "Gaming"],
+  combined$log_LTV[combined$Views > 0 & combined$LTV > 0 & combined$Category == "Gaming"],
+  method = "pearson"
+)
+
+
 #Comments vs LTV (overall) 
 t.test(combined$Comments, combined$LTV, var.equal = FALSE)
 
@@ -31,12 +37,8 @@ t.test(
   combined$Comments[combined$Category=="Entertainment"],
   combined$LTV[combined$Category=="Entertainment"]
 )
-#Comments vs LTV , by video age category
-t.test(
-  combined$Comments[combined$Category=="Entertainment"],
-  combined$LTV[combined$Category=="Entertainment"],
-  var.equal = FALSE
-)
+
+
 #Views vs Comments (overall)
 t.test(combined$Views, combined$Comments, var.equal = FALSE)
 

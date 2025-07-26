@@ -38,15 +38,24 @@ category_Comments <- combined %>%
 
 combined <- combined %>% 
   mutate(CommentsGroup = case_when(
-    Comments >= 0 & Comments <= 1 ~ "0-1 Comments",
-    Comments >= 2 & Comments <= 30 ~ "2-30 Comments",
-    Comments >= 31 & Comments <= 250 ~ "31-250 Comments",
-    Comments >= 251 ~ "251+ Comments",
+    Comments == 0 ~ "No Comments",
+    Comments >= 1 & Comments <= 50 ~ "1-50 Comments",
+    Comments >= 21 ~ "51+ Comments",
+    TRUE ~ "Other"
+  ))
+
+combined <- combined %>% 
+  mutate(LTVGroup = case_when(
+    LTV > 0 & LTV <= 1 ~ "0-1 LTV",
+    LTV > 1& LTV <= 2 ~ "2 LTV",
+    LTV > 2 & LTV <= 4 ~ "3~4 LTV",
+    LTV > 4 & LTV <= 6 ~ "5~6 LTV",
+    LTV > 6 ~ "6+ LTV",
     TRUE ~ "Other"
   ))
 
 combined$CommentsGroup <- factor(combined$CommentsGroup,
-                                 levels = c("0-1 Comments", "2-30 Comments", "31-250 Comments", "251+ Comments","Other"))
+                                 levels = c("No Comments", "1-50 Comments", "51+ Comments","Other"))
 
 combined$ViewsLog <- log10(combined$Views)
 
@@ -58,4 +67,5 @@ combined <- combined %>%
     log_Views = log10(Views),
     log_LTV = log10(LTV)
   )
+
   

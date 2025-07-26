@@ -7,7 +7,7 @@ def export(video_data,lenlist):
         filename = f"C:/Users/jaeyo/Downloads/youtube-statistics/CSV/youtube_data_{datetime.now().date()}.csv"
         with open(filename, 'w', newline='', encoding='utf-8') as csvfile: #writing csv file
             writer = csv.writer(csvfile)
-            headers = ['Title', 'Date', 'Views', 'Likes', 'Comments','Category','Duration','VideoID','Extracted','LTV','CTL','Diff']
+            headers = ['Title', 'Date', 'Views', 'Likes', 'ViewsLog', 'LikesLog', 'Comments','Category','Duration','VideoID','Extracted','LTV','CTL','Diff', 'CommentsGroup', 'DiffGroup']
 
             writer.writerow(headers)
             for u in range(len(video_data)):
@@ -16,3 +16,5 @@ def export(video_data,lenlist):
         
         print(f"\nData exported to CSV: {filename}")
         print(f"Total videos exported: {len(video_data)}")
+
+

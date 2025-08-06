@@ -2,14 +2,15 @@ from googleapiclient.discovery import build
 import isodate # type: ignore
 from datetime import datetime
 from category import ratio, log10, grouping, diff
-youtube_api_key = 'AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk'
+api_list = ['AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk', 'AIzaSyDaHBCoomTdIcabsnKRJONYCgJVomWFlI8','AIzaSyA6TJPtt58PpgzVT93DqVLIuDmi58BghGU']
+youtube_api_key = api_list[0]
 youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
-def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):#publishedbefore
+def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum, timeperiod):#publishedbefore
     print(categoryID, category[categoryID])
     video_data = [] #list with information to export
     videos_with_likes = 0 #current number of videos with a valid amount of likes
-    max_videos_wanted = 50 #our target number
+    max_videos_wanted = requestnum #our target number
     
     search_response = youtube.search().list(
         q="a", #random character "a" added to keep the videos in english (or any other language that uses latin alphabet)
@@ -47,13 +48,13 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):#
         comments = stats.get('commentCount', 'N/A')
         length = contentdetails.get('duration', 'N/A')
 
-        if likes != 'N/A':
+        if likes != 'N/A' and comments != 'N/A':
+            views = int(views); likes = int(likes); comments = int(comments)
             try:
                 duration = isodate.parse_duration(length) #changing video length from ISO8601 to normal date type
             except (isodate.isoerror.ISO8601Error):
                 break
-            durationS = int(duration[0:1]) * 3600 + int(duration[2:4]) * 60 + int(duration[5])
-
+            durationS = int(duration.total_seconds()) 
             datediff = diff(datetime, extracteddate,date)
             newlog = log10(views,likes)
             newratio = ratio(likes, comments, views)
@@ -69,3 +70,5 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum):#
             videos_with_likes += 1 #updating amount of videos with valid likes
 
     return video_data
+
+#variables: views, lvt, comments, category, date extracted, date uploaded, video length

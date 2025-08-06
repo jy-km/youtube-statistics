@@ -4,6 +4,7 @@ library(ggplot2)
 library(data.table)
 
 combined <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/youtube_data_6_28.csv")
+df2 <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/youtube_data_2025-07-12.csv")
 
 combined$LTV <- as.numeric(combined$LTV)
 combined$CTL <- as.numeric(combined$CTL)
@@ -70,4 +71,46 @@ combined$CommentsGroup <- factor(combined$CommentsGroup,
 combined$ViewsLog <- log10(combined$Views)
 
 combined$LTVLog <- log10(combined$LTV)
-  
+ 
+
+
+
+
+
+ 
+df2 <- df2 %>% 
+  mutate(CommentsGroup = case_when(
+    Comments == 0 ~ "No Comments",
+    Comments >= 1 & Comments <= 50 ~ "1-50 Comments",
+    Comments >= 21 ~ "51+ Comments",
+    TRUE ~ "Other"
+  ))
+
+df2 <- df2 %>% 
+  mutate(LTVGroup = case_when(
+    LTV > 0 & LTV <= 1 ~ "0-1 LTV",
+    LTV > 1& LTV <= 2 ~ "2 LTV",
+    LTV > 2 & LTV <= 4 ~ "3~4 LTV",
+    LTV > 4 & LTV <= 6 ~ "5~6 LTV",
+    LTV > 6 ~ "6+ LTV",
+    TRUE ~ "Other"
+  ))
+
+df2 <- df2 %>% 
+  mutate(DiffGroup = case_when(
+    Diff >= 0   & Diff <= 7     ~ "<= 1 week",
+    Diff >= 8   & Diff <= 31    ~ "<= 1 month",
+    Diff >= 32  & Diff <= 365   ~ "<= 1 year",
+    Diff >= 366 & Diff <= 732   ~ "<= 2 years",
+    Diff > 732                  ~ "> 2 years",
+    TRUE                        ~ "Other"
+  ))
+
+df2$CommentsGroup <- factor(df2$CommentsGroup,
+                                 levels = c("No Comments", "1-50 Comments", "51+ Comments","Other"))
+
+df2$ViewsLog <- log10(df2$Views)
+
+df2
+filter(LTVGroup = "N/A")
+df2$LTVLog <- log10(df2$LTV)

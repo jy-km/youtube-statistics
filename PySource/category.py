@@ -3,21 +3,21 @@ import isodate
 def ratio(likes, comments, views):
     try:
         LTV = int(likes) / int(views)
-        CTL = int(comments) / int(likes)
+        CTV = int(comments) / int(views)
     except (ValueError, ZeroDivisionError):
         LTV = "NA"
-        CTL = "NA"
-    return [LTV, CTL]
+        CTV = "NA"
+    return [LTV, CTV]
 
 def log10(views, likes):
-    if views >= 0:
+    if views > 0:
         viewslog = math.log10(views)
-    elif views:
+    else:
         viewslog = "NA"
 
-    if likes >= 0:
+    if likes > 0:
         likeslog = math.log10(likes)
-    elif likes:
+    else:
         likeslog = "NA"
     return [viewslog,likeslog]
 
@@ -54,4 +54,6 @@ def diff(datetime, extracteddate,date):
     return datediff
 
 
-'ltv ratio'
+"""
+Title, date, views, likes, comments, video id, category, ltv, ctv, diff, ltvlog, viewslog, ltvgroup, commentsgroup, diffgroup
+"""

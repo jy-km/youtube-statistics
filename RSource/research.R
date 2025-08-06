@@ -124,3 +124,8 @@ combined %>%
     y = "Log10(Views)"
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+df2 <- df2 %>% filter(Likes == "N/A")
+model <- lm(ViewsLog ~ Likes + Category + CommentsGroup + Duration, data = df2)
+summary(model)

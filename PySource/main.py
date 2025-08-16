@@ -25,9 +25,9 @@ lenlist = []
 
 for ID in category:
 #randomquery(category, categoryID,publishedbefore,extracteddate,requestnum)
-    rq = randomquery(category, ID,"2025-8-05T00:00:00Z","2025-08-06",50, "oneday") 
+    rq = randomquery(category, ID,"2023-8-10T00:00:00Z","2025-08-10",50, "oneday") 
     totallist.append(rq) #date: YYYY-MM-DD format
     lenlist.append(len(rq))
-export(totallist,lenlist,"oneday") 
+export(totallist,lenlist,"twoyears") 
 print(lenlist)
 

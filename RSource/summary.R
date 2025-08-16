@@ -1,74 +1,155 @@
-#Summary of variables
-#Views
-combined %>%
-  filter(Views > 0) %>%
-  mean(combined$Views, na.rm = TRUE)
-  sd(combined$Views, na.rm = TRUE)
-  min(combined$Views, na.rm = TRUE)
-  max(combined$Views, na.rm = TRUE)
-  median(combined$Views, na.rm = TRUE)
+#For continuous variables, show these: 
+#mean, standard deviation, median, minimum, maximum; 
+#for categorical variables, show these: number of observations, % of each category. 
+
+total = 11673
+
+finaldf %>%
+  summarise(
+  Mean = mean(finaldf$Views, na.rm = TRUE),
+  SD = sd(finaldf$Views, na.rm = TRUE),
+  Minimum = min(finaldf$Views, na.rm = TRUE),
+  Maximum = max(finaldf$Views, na.rm = TRUE),
+  Median = median(finaldf$Views, na.rm = TRUE)
+)
   
-combined %>%
-  filter(Views > 0) %>%
-  mutate(log_Views = log10(Views)) %>%
+finaldf %>%
   summarise(
-    mean = mean(log_Views, na.rm = TRUE),
-    sd   = sd(log_Views, na.rm = TRUE),
-    min  = min(log_Views, na.rm = TRUE),
-    max  = max(log_Views, na.rm = TRUE),
-    median = median(log_Views, na.rm = TRUE)
-  )
-#LTV
-combined %>%
+  Mean = mean(finaldf$ViewsLog, na.rm = TRUE),
+  SD = sd(finaldf$ViewsLog, na.rm = TRUE),
+  Minimum = min(finaldf$ViewsLog, na.rm = TRUE),
+  Maximum = max(finaldf$ViewsLog, na.rm = TRUE),
+  Median = median(finaldf$ViewsLog, na.rm = TRUE)
+)
+  
+finaldf %>%
+  filter(Likes > 0) %>%
   summarise(
-    mean(LTV, na.rm = TRUE),
-    sd(LTV, na.rm = TRUE),
-    min(LTV, na.rm = TRUE),
-    max(LTV, na.rm = TRUE),
-    median(LTV, na.rm = TRUE)
-  )
-combined %>%
-  filter(LTV > 0) %>%
+  Mean = mean(finaldf$Likes, na.rm = TRUE),
+  SD = sd(finaldf$Likes, na.rm = TRUE),
+  Minimum = min(finaldf$Likes, na.rm = TRUE),
+  Maximum = max(finaldf$Likes, na.rm = TRUE),
+  Median = median(finaldf$Likes, na.rm = TRUE)
+)
 
-#Log_LTV
-combined %>%
-  filter(LTV > 0) %>%
-  mutate(log_LTV = log10(LTV)) %>%
+finaldf %>%
   summarise(
-    mean = mean(log_LTV, na.rm = TRUE),
-    sd   = sd(log_LTV, na.rm = TRUE),
-    min  = min(log_LTV, na.rm = TRUE),
-    max  = max(log_LTV, na.rm = TRUE),
-    median = median(log_LTV, na.rm = TRUE)
+    Mean = mean(finaldf$LikesLog, na.rm = TRUE),
+    SD = sd(finaldf$LikesLog, na.rm = TRUE),
+    Minimum = min(finaldf$LikesLog, na.rm = TRUE),
+    Maximum = max(finaldf$LikesLog, na.rm = TRUE),
+    Median = median(finaldf$LikesLog, na.rm = TRUE)
   )
 
-#distribution (n, % of each category) of #likes to views ratio categories
-combined %>%
-  group_by(Category) %>%
+finaldf %>%
   summarise(
-    count = n(),
-    mean = mean(LTV, na.rm = TRUE),
-    median = median(LTV, na.rm = TRUE),
-    sd = sd(LTV, na.rm = TRUE),
-    min = min(LTV, na.rm = TRUE),
-    max = max(LTV, na.rm = TRUE)
-  )
-
-#Comments
-combined %>%
-  summarise(
-    mean = mean(Comments, na.rm = TRUE),
-    sd = sd(Comments, na.rm = TRUE),
-    min = min(Comments, na.rm = TRUE),
-    max = max(Comments, na.rm = TRUE),
-    median = median(Comments, na.rm = TRUE)
-  )
-
-#distribution (n, % of each category) of #comments categories
-combined %>%
-  filter(!is.na(Category), !is.na(CommentsGroup)) %>%  
-  group_by(Category, CommentsGroup) %>%
+  Mean = mean(finaldf$LTV, na.rm = TRUE),
+  SD = sd(finaldf$LTV, na.rm = TRUE),
+  Minimum = min(finaldf$LTV, na.rm = TRUE),
+  Maximum = max(finaldf$LTV, na.rm = TRUE),
+  Median = median(finaldf$LTV, na.rm = TRUE)
+)
+  
+#LTV category
+finaldf %>%
+  filter(!is.na(LTVGroup)) %>%  
+  group_by(LTVGroup) %>%
   summarise(n = n(), .groups = 'drop') %>%
-  group_by(Category) %>%
-  mutate(percent = round(n / sum(n) * 100, 1)) %>%
+  mutate(percent = round(n / total * 100, 1)) %>%
   print(n=100)
+
+#comments
+finaldf %>%
+  summarise(
+  Mean = mean(finaldf$Comments, na.rm = TRUE),
+  SD = sd(finaldf$Comments, na.rm = TRUE),
+  Minimum = min(finaldf$Comments, na.rm = TRUE),
+  Maximum = max(finaldf$Comments, na.rm = TRUE),
+  Median = median(finaldf$Comments, na.rm = TRUE)
+)
+
+#comments category
+finaldf %>%
+  filter(!is.na(CommentsGroup)) %>%  
+  group_by(CommentsGroup) %>%
+  summarise(n = n(), .groups = 'drop') %>%
+  mutate(percent = round(n / total * 100, 1)) %>%
+  print(n=100)
+
+#comments-to-view ratio
+finaldf %>%
+  summarise(
+  Mean = mean(finaldf$CTV, na.rm = TRUE),
+  SD = sd(finaldf$CTV, na.rm = TRUE),
+  Minimum = min(finaldf$CTV, na.rm = TRUE),
+  Maximum = max(finaldf$CTV, na.rm = TRUE),
+  Median = median(finaldf$CTV, na.rm = TRUE)
+)
+
+#comments-to-view ratio category
+
+#video category
+finaldf %>%
+  filter(!is.na(Category)) %>%  
+  group_by(Category) %>%
+  summarise(n = n(), .groups = 'drop') %>%
+  mutate(percent = round(n /  total * 100, 1)) %>%
+  print(n=100)
+
+#video age
+finaldf %>%
+  summarise(
+  Mean = mean(finaldf$Diff, na.rm = TRUE),
+  SD = sd(finaldf$Diff, na.rm = TRUE),
+  Minimum = min(finaldf$Diff, na.rm = TRUE),
+  Maximum = max(finaldf$Diff, na.rm = TRUE),
+  Median = median(finaldf$Diff, na.rm = TRUE)
+)
+#video age category
+finaldf %>%
+  filter(!is.na(DiffGroup)) %>%  
+  group_by(DiffGroup) %>%
+  summarise(n = n(), .groups = 'drop') %>%
+  mutate(percent = round(n /  total * 100, 1)) %>%
+  print(n=100)
+
+#video length
+finaldf %>%
+  summarise(
+  Mean = mean(finaldf$Duration, na.rm = TRUE),
+  SD = sd(finaldf$Duration, na.rm = TRUE),
+  Minimum = min(finaldf$Duration, na.rm = TRUE),
+  Maximum = max(finaldf$Duration, na.rm = TRUE),
+  Median = median(finaldf$Duration, na.rm = TRUE)
+)
+#video length category
+finaldf %>%
+  filter(!is.na(DurationGroup)) %>%  
+  group_by(DurationGroup) %>%
+  summarise(n = n(), .groups = 'drop') %>%
+  mutate(percent = round(n /  total * 100, 1)) %>%
+  print(n=100)
+
+  finaldf %>%
+    filter(!is.na(CTV), CTV != 0) %>%
+    summarise(row_count = n())
+
+
+
+log[views] vs LTV category
+log[views] vs #comments category
+log[views] vs comments-to-views category
+Also, plot the bivariate relationships using bar charts.  In each chart, there is a bar for each category and the height of the bar is average log[view].   See the example codes for barcharts in 7.3.2 in the ebook above link, but you can use other examples that you like. 
+Examine bivariate relationships using ANOVA and pairwise tests.  Same as above, but this time, separately for each video category.  No plots needed yet.  Just ANOVA and pairwise t-tests.  I.e.,
+1) For video category 1 (e.g., gamining), do ANOVA and pairwise t-tests of 
+log[views] vs LTV category
+log[views] vs #comments category
+log[views] vs comments-to-views category
+2) For video category 2 (e.g., entertainment), do ANOVA and pairwise t-tests of 
+log[views] vs LTV category
+log[views] vs #comments category
+log[views] vs comments-to-views category
+3) For video category 3 (e.g., politics), do ANOVA and pairwise t-tests of 
+log[views] vs LTV category
+log[views] vs #comments category
+log[views] vs comments-to-views category

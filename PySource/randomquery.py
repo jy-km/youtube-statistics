@@ -3,7 +3,7 @@ import isodate # type: ignore
 from datetime import datetime
 from category import ratio, log10, grouping, diff
 api_list = ['AIzaSyBQ8vBBDq0Kwf_Ni3hh_HLBkFaqhOifNTk', 'AIzaSyDaHBCoomTdIcabsnKRJONYCgJVomWFlI8','AIzaSyA6TJPtt58PpgzVT93DqVLIuDmi58BghGU']
-youtube_api_key = api_list[0]
+youtube_api_key = api_list[1]
 youtube = build('youtube', 'v3', developerKey=youtube_api_key)
 
 def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum, timeperiod):#publishedbefore
@@ -61,7 +61,7 @@ def randomquery(category, categoryID,publishedbefore,extracteddate,requestnum, t
             newgroup = grouping(comments,datediff)
 
             video_data.append([
-    title, date, views, likes, newlog[0], newlog[0],  comments, category[categoryID], durationS, video_id, publishedbefore,
+    title, date, views, likes, newlog[0], newlog[1],  comments, category[categoryID], durationS, video_id, publishedbefore,
     newratio[0], newratio[1], datediff, newgroup[0], newgroup[1]
     ])
     

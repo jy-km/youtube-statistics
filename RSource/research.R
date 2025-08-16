@@ -1,30 +1,30 @@
-summary(combined)
+summary(finaldf)
 
-summary(combined$Views)
+summary(finaldf$Views)
 
 
-cor(combined$Views,combined$LTV)
+cor(finaldf$Views,finaldf$LTV)
 
-cor.test(combined$Views,combined$LTV, method = "pearson")
+cor.test(finaldf$Views,finaldf$LTV, method = "pearson")
 
 #table with statistical test (ANOVA): Y=log[#views], X=#LTV ratio category 
-aov_result <- aov(ViewsLog ~ LTVGroup, data = na.omit(combined))
+aov_result <- aov(ViewsLog ~ LTVGroup, data = na.omit(finaldf))
 summary(aov_result)
 
-ggplot(combined, aes(x=LTVGroup,y=ViewsLog))+
+ggplot(finaldf, aes(x=LTVGroup,y=ViewsLog))+
   stat_boxplot(geom="errorbar",width=.5) +
   labs(title="ANOVA results between LTV Group and Log10 Views",x="LTV Group", y="Log10 Views")+
   geom_boxplot(fill = "skyblue")+
   theme_minimal()
 
 #table with statistical test (ANOVA): Y=log[#views], X=#comments category
-aov_result <- aov(ViewsLog ~ CommentsGroup, data = na.omit(combined))
+aov_result <- aov(ViewsLog ~ CommentsGroup, data = na.omit(finaldf))
 summary(aov_result)
 
 #for each video category (or by video category),
 #ANOVA table and bar chart:  Y=log[#views], X=#LTV ratio category
-for (cat in unique(na.omit(combined$Category))) {
-  subset_data <- combined %>%
+for (cat in unique(na.omit(finaldf$Category))) {
+  subset_data <- finaldf %>%
     filter(Category == cat, !is.na(ViewsLog), !is.na(LTVGroup))
   
   if (nrow(subset_data) > 1 && length(unique(subset_data$LTVGroup)) > 1) {
@@ -35,7 +35,7 @@ for (cat in unique(na.omit(combined$Category))) {
 }
 
 #bar chart
-combined %>%
+finaldf %>%
   filter(!is.na(Category), !is.na(LTVGroup), !is.na(ViewsLog)) %>%
   ggplot(aes(x = LTVGroup, y = ViewsLog)) +
   geom_boxplot(outlier.shape = NA,fill="skyblue") +
@@ -49,8 +49,8 @@ combined %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #ANOVA table and bar chart:  Y=log[#views], X=#comments category
-for (cat in unique(na.omit(combined$Category))) {
-  subset_data <- combined %>%
+for (cat in unique(na.omit(finaldf$Category))) {
+  subset_data <- finaldf %>%
     filter(Category == cat, !is.na(ViewsLog), !is.na(LTVGroup))
   
   if (nrow(subset_data) > 1 && length(unique(subset_data$LTVGroup)) > 1) {
@@ -61,7 +61,7 @@ for (cat in unique(na.omit(combined$Category))) {
   }
 }
 #bar chart
-combined %>%
+finaldf %>%
   filter(!is.na(Category), !is.na(CommentsGroup), !is.na(ViewsLog)) %>%
   ggplot(aes(x = CommentsGroup, y = ViewsLog)) +
   geom_boxplot(outlier.shape = NA, fill="skyblue") +
@@ -76,8 +76,8 @@ combined %>%
 
 #for each age of video category :
 #ANOVA table and bar chart:  Y=log[#views], X=#LTV ratio category
-for (cat in unique(na.omit(combined$DiffGroup))) {
-  subset_data <- combined %>%
+for (cat in unique(na.omit(finaldf$DiffGroup))) {
+  subset_data <- finaldf %>%
     filter(DiffGroup == cat, !is.na(ViewsLog), !is.na(LTVGroup))
   
   if (nrow(subset_data) > 1 && length(unique(subset_data$LTVGroup)) > 1) {
@@ -87,7 +87,7 @@ for (cat in unique(na.omit(combined$DiffGroup))) {
   }
 }
 
-combined %>%
+finaldf %>%
   filter(!is.na(DiffGroup), !is.na(LTVGroup), !is.na(ViewsLog)) %>%
   ggplot(aes(x = LTVGroup, y = ViewsLog)) +
   geom_boxplot(outlier.shape = NA,fill="skyblue") +
@@ -101,8 +101,8 @@ combined %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #ANOVA table and bar chart:  Y=log[#views], X=#comments category
-for (cat in unique(na.omit(combined$DiffGroup))) {
-  subset_data <- combined %>%
+for (cat in unique(na.omit(finaldf$DiffGroup))) {
+  subset_data <- finaldf %>%
     filter(DiffGroup == cat, !is.na(ViewsLog), !is.na(CommentsGroup))
   
   if (nrow(subset_data) > 1 && length(unique(subset_data$CommentsGroup)) > 1) {
@@ -112,7 +112,7 @@ for (cat in unique(na.omit(combined$DiffGroup))) {
   }
 }
 
-combined %>%
+finaldf %>%
   filter(!is.na(DiffGroup), !is.na(CommentsGroup), !is.na(ViewsLog)) %>%
   ggplot(aes(x = CommentsGroup, y = ViewsLog, fill = DiffGroup)) +
   geom_boxplot(outlier.shape = NA,fill="skyblue") +
@@ -129,3 +129,26 @@ combined %>%
 df2 <- df2 %>% filter(Likes == "N/A")
 model <- lm(ViewsLog ~ Likes + Category + CommentsGroup + Duration, data = df2)
 summary(model)
+
+
+
+#Using the full sample,
+
+#Get summary statistics of all variables to be included in the analysis. 
+#For continuous variables, show these: 
+#mean, standard deviation, median, minimum, maximum; 
+#for categorical variables, show these: number of observations, % of each category.  
+#views
+#log views
+#likes
+#LTV
+#LTV category
+#comments
+#comments category
+#comments-to-view ratio
+#comments-to-view ratio category
+#video category
+#video age 
+#video age category
+#video length
+#video length category

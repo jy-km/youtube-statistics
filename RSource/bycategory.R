@@ -21,7 +21,7 @@ ggplot(category_Comments, aes(x = Category, y = Value)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 #LTV vs Views by category
-combined %>%
+finaldf %>%
   filter(Category == "NonprofitsActivism") %>%
   filter(Views > 0 & Views <= 10000, LTV <= 20) %>%
   ggplot(aes(x = Views, y = LTV)) +

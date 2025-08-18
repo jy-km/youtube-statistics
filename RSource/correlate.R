@@ -196,3 +196,48 @@ pairwise.t.test(
   finaldf$CTVGroup[complete.cases(finaldf$ViewsLog, finaldf$CTVGroup)],
   p.adj = "bonferroni"
 )
+
+
+
+
+# Function to run ANOVA + pairwise t-tests for a given category and grouping variable
+run_anova_pairwise <- function(data, category_name, group_var) {
+  # Filter to one video category
+  df_cat <- data %>% filter(Category == category_name)
+  
+  # Remove NA in group_var
+  df_cat <- df_cat[complete.cases(df_cat$ViewsLog, df_cat[[group_var]]), ]
+  
+  cat("\n===== Category:", category_name, "| Group variable:", group_var, "=====\n")
+  
+  # Dynamically create formula
+  formula_obj <- as.formula(paste("ViewsLog ~", group_var))
+  
+  # Equal variances
+  print(bartlett.test(formula_obj, data = df_cat))
+  
+  # ANOVA
+  aov_obj <- aov(formula_obj, data = df_cat)
+  print(summary(aov_obj))
+  
+  # Effect size
+  print(DescTools::EtaSq(aov_obj, type = 2, anova = FALSE))
+  
+  # Pairwise t-tests (Bonferroni)
+  print(pairwise.t.test(df_cat$ViewsLog, df_cat[[group_var]], p.adj = "bonferroni"))
+}
+
+# List of category names
+categories <- c("FilmAnimation", "AutosVehicles", "Music", "PetsAnimals", "Sports",
+                "TravelEvents", "Gaming", "PeopleBlogs", "Comedy", "Entertainment",
+                "NewsPolitics", "HowtoStyle", "Education", "ScienceTech", "NonprofitsActivism")
+
+# Variables to test against ViewsLog
+group_vars <- c("LTVGroup", "CommentsGroup", "CTVGroup")
+
+# Loop over categories and variables
+for (cat_name in categories) {
+  for (grp in group_vars) {
+    run_anova_pairwise(finaldf, cat_name, grp)
+  }
+}

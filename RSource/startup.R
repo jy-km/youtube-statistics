@@ -12,7 +12,6 @@ library(ggpubr)
 library(gtsummary)
 library(table1)
 library(purrr)
-
 finaldf <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf.csv")
 
 

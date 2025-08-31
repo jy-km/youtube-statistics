@@ -1,155 +1,85 @@
-#For continuous variables, show these: 
-#mean, standard deviation, median, minimum, maximum; 
-#for categorical variables, show these: number of observations, % of each category. 
+#Standard cont variables
+subject_list_1 <- c("Views", "Likes", "Diff", "CTV", "Duration")
 
-total = 11673
+#Filtered cont variables
+subject_list_2 <- c("LTV", "ViewsLog", "LikesLog", "Likes") 
 
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$Views, na.rm = TRUE),
-  SD = sd(finaldf$Views, na.rm = TRUE),
-  Minimum = min(finaldf$Views, na.rm = TRUE),
-  Maximum = max(finaldf$Views, na.rm = TRUE),
-  Median = median(finaldf$Views, na.rm = TRUE)
+#cat variables
+subject_list_3 <- c("LTVGroup", "CommentsGroup", "DiffGroup", "Category", "DurationGroup")
+
+summary_results <- generate_summary_files(
+  data = finaldf,
+  contvar = subject_list_1,
+  contvar_filt = subject_list_2,
+  catvar = subject_list_3,
+  output_prefix = "video_analysis" 
 )
+
+# You can now view the results directly
+print(summary_results$cont)
+print(summary_results$cat)
+
+
+generate_summary_files <- function(data, contvar, contvar_filt, catvar, output_prefix = "summary") {
   
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$ViewsLog, na.rm = TRUE),
-  SD = sd(finaldf$ViewsLog, na.rm = TRUE),
-  Minimum = min(finaldf$ViewsLog, na.rm = TRUE),
-  Maximum = max(finaldf$ViewsLog, na.rm = TRUE),
-  Median = median(finaldf$ViewsLog, na.rm = TRUE)
-)
+#cont variables
+  cont_summary <- purrr::map_dfr(contvar, ~{
+    var <- sym(.x)
+    data %>%
+      summarise(
+        Mean = mean(!!var, na.rm = TRUE),
+        SD = sd(!!var, na.rm = TRUE),
+        Median = median(!!var, na.rm = TRUE),
+        Minimum = min(!!var, na.rm = TRUE),
+        Maximum = max(!!var, na.rm = TRUE)
+      ) %>%
+      mutate(Variable = .x, .before = 1)
+  })
   
-finaldf %>%
-  filter(Likes > 0) %>%
-  summarise(
-  Mean = mean(finaldf$Likes, na.rm = TRUE),
-  SD = sd(finaldf$Likes, na.rm = TRUE),
-  Minimum = min(finaldf$Likes, na.rm = TRUE),
-  Maximum = max(finaldf$Likes, na.rm = TRUE),
-  Median = median(finaldf$Likes, na.rm = TRUE)
-)
-
-finaldf %>%
-  summarise(
-    Mean = mean(finaldf$LikesLog, na.rm = TRUE),
-    SD = sd(finaldf$LikesLog, na.rm = TRUE),
-    Minimum = min(finaldf$LikesLog, na.rm = TRUE),
-    Maximum = max(finaldf$LikesLog, na.rm = TRUE),
-    Median = median(finaldf$LikesLog, na.rm = TRUE)
-  )
-
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$LTV, na.rm = TRUE),
-  SD = sd(finaldf$LTV, na.rm = TRUE),
-  Minimum = min(finaldf$LTV, na.rm = TRUE),
-  Maximum = max(finaldf$LTV, na.rm = TRUE),
-  Median = median(finaldf$LTV, na.rm = TRUE)
-)
+#cont filtered variables
+  cont_filtered_summary <- purrr::map_dfr(contvar_filt, ~{
+    var <- sym(.x)
+    data %>%
+      filter((!!var) > 0) %>%
+      summarise(
+        Mean = mean(!!var, na.rm = TRUE),
+        SD = sd(!!var, na.rm = TRUE),
+        Median = median(!!var, na.rm = TRUE),
+        Minimum = min(!!var, na.rm = TRUE),
+        Maximum = max(!!var, na.rm = TRUE)
+      ) %>%
+      mutate(
+        Variable = .x,
+        Note = "Filtered for values > 0",
+        .before = 1
+      )
+  })
   
-#LTV category
-finaldf %>%
-  filter(!is.na(LTVGroup)) %>%  
-  group_by(LTVGroup) %>%
-  summarise(n = n(), .groups = 'drop') %>%
-  mutate(percent = round(n / total * 100, 1)) %>%
-  print(n=100)
-
-#comments
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$Comments, na.rm = TRUE),
-  SD = sd(finaldf$Comments, na.rm = TRUE),
-  Minimum = min(finaldf$Comments, na.rm = TRUE),
-  Maximum = max(finaldf$Comments, na.rm = TRUE),
-  Median = median(finaldf$Comments, na.rm = TRUE)
-)
-
-#comments category
-finaldf %>%
-  filter(!is.na(CommentsGroup)) %>%  
-  group_by(CommentsGroup) %>%
-  summarise(n = n(), .groups = 'drop') %>%
-  mutate(percent = round(n / total * 100, 1)) %>%
-  print(n=100)
-
-#comments-to-view ratio
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$CTV, na.rm = TRUE),
-  SD = sd(finaldf$CTV, na.rm = TRUE),
-  Minimum = min(finaldf$CTV, na.rm = TRUE),
-  Maximum = max(finaldf$CTV, na.rm = TRUE),
-  Median = median(finaldf$CTV, na.rm = TRUE)
-)
-
-#comments-to-view ratio category
-
-#video category
-finaldf %>%
-  filter(!is.na(Category)) %>%  
-  group_by(Category) %>%
-  summarise(n = n(), .groups = 'drop') %>%
-  mutate(percent = round(n /  total * 100, 1)) %>%
-  print(n=100)
-
-#video age
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$Diff, na.rm = TRUE),
-  SD = sd(finaldf$Diff, na.rm = TRUE),
-  Minimum = min(finaldf$Diff, na.rm = TRUE),
-  Maximum = max(finaldf$Diff, na.rm = TRUE),
-  Median = median(finaldf$Diff, na.rm = TRUE)
-)
-#video age category
-finaldf %>%
-  filter(!is.na(DiffGroup)) %>%  
-  group_by(DiffGroup) %>%
-  summarise(n = n(), .groups = 'drop') %>%
-  mutate(percent = round(n /  total * 100, 1)) %>%
-  print(n=100)
-
-#video length
-finaldf %>%
-  summarise(
-  Mean = mean(finaldf$Duration, na.rm = TRUE),
-  SD = sd(finaldf$Duration, na.rm = TRUE),
-  Minimum = min(finaldf$Duration, na.rm = TRUE),
-  Maximum = max(finaldf$Duration, na.rm = TRUE),
-  Median = median(finaldf$Duration, na.rm = TRUE)
-)
-#video length category
-finaldf %>%
-  filter(!is.na(DurationGroup)) %>%  
-  group_by(DurationGroup) %>%
-  summarise(n = n(), .groups = 'drop') %>%
-  mutate(percent = round(n /  total * 100, 1)) %>%
-  print(n=100)
-
-  finaldf %>%
-    filter(!is.na(CTV), CTV != 0) %>%
-    summarise(row_count = n())
-
-
-
-log[views] vs LTV category
-log[views] vs #comments category
-log[views] vs comments-to-views category
-Also, plot the bivariate relationships using bar charts.  In each chart, there is a bar for each category and the height of the bar is average log[view].   See the example codes for barcharts in 7.3.2 in the ebook above link, but you can use other examples that you like. 
-Examine bivariate relationships using ANOVA and pairwise tests.  Same as above, but this time, separately for each video category.  No plots needed yet.  Just ANOVA and pairwise t-tests.  I.e.,
-1) For video category 1 (e.g., gamining), do ANOVA and pairwise t-tests of 
-log[views] vs LTV category
-log[views] vs #comments category
-log[views] vs comments-to-views category
-2) For video category 2 (e.g., entertainment), do ANOVA and pairwise t-tests of 
-log[views] vs LTV category
-log[views] vs #comments category
-log[views] vs comments-to-views category
-3) For video category 3 (e.g., politics), do ANOVA and pairwise t-tests of 
-log[views] vs LTV category
-log[views] vs #comments category
-log[views] vs comments-to-views category
+#cat variables
+  total_n <- nrow(data)
+  cat_summary <- purrr::map_dfr(catvar, ~{
+    data %>%
+      filter(!is.na(.data[[.x]])) %>%
+      count(Category_Level = .data[[.x]], name = "Count") %>%
+      mutate(
+        Variable = .x,
+        Percentage = round(Count / total_n * 100, 1)
+      ) %>%
+      select(Variable, Category_Level, Count, Percentage)
+  })
+  
+#CSV
+  all_cont_summary <- bind_rows(cont_summary, cont_filtered_summary)
+  cont_filename <- paste0(output_prefix, "_cont.csv")
+  readr::write_csv(all_cont_summary, cont_filename)
+  print(paste("Continuous summary saved to:", cont_filename))
+  
+  
+  # --- 5. Write cat results to a separate CSV ---
+  cat_filename <- paste0(output_prefix, "_cat.csv")
+  readr::write_csv(cat_summary, cat_filename)
+  print(paste("Categorical summary saved to:", cat_filename))
+  
+  # Return the dataframes as a list to use in your R session
+  return(list(cont = all_cont_summary, cat = cat_summary))
+}

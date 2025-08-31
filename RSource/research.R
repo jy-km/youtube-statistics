@@ -129,26 +129,3 @@ finaldf %>%
 df2 <- df2 %>% filter(Likes == "N/A")
 model <- lm(ViewsLog ~ Likes + Category + CommentsGroup + Duration, data = df2)
 summary(model)
-
-
-
-#Using the full sample,
-
-#Get summary statistics of all variables to be included in the analysis. 
-#For continuous variables, show these: 
-#mean, standard deviation, median, minimum, maximum; 
-#for categorical variables, show these: number of observations, % of each category.  
-#views
-#log views
-#likes
-#LTV
-#LTV category
-#comments
-#comments category
-#comments-to-view ratio
-#comments-to-view ratio category
-#video category
-#video age 
-#video age category
-#video length
-#video length category

@@ -1,3 +1,9 @@
+#"FilmAnimation", "AutosVehicles", "Music","PetsAnimals","Sports", "TravelEvents",
+#"Gaming", "PeopleBlogs","Comedy","Entertainment","NewsPolitics","HowtoStyle",
+#"Education","ScienceTech","NonprofitsActivism"
+
+CatVar = "FilmAnimation"
+
 #Views vs LTV (overall)
 #Pearson
 cor(
@@ -8,6 +14,7 @@ cor(
 
 #graph
 finaldf %>%
+  filter(Category == "NonprofitsActivism") %>%
   filter(Views > 0, LTV > 0) %>%
   mutate(
     log_Views = log10(Views),
@@ -52,36 +59,36 @@ t.test(
 #Also, plot the bivariate relationships using bar charts.  In each chart, there is a bar for each category and the height of the bar is average log[view].   See the example codes for barcharts in 7.3.2 in the ebook above link, but you can use other examples that you like. 
 
 #ViewsLog and LTVGroup
-
-class(finaldf$LTVGroup)  
+tempdf <- finaldf %>%
+  filter(Category == CatVar)
 
 # 6.3 Checking data for violations of assumptions
 
 ## 6.3.1 Group sizes
 
-table(finaldf$LTVGroup)
+table(tempdf$LTVGroup)
 
 #other in LTVGroup is filtered out
 ## 6.3.2 Checking Equal Variances 
-by(finaldf$ViewsLog, finaldf$LTVGroup, mean, na.rm = TRUE)
-by(finaldf$ViewsLog, finaldf$LTVGroup, sd, na.rm = TRUE)
+by(tempdf$ViewsLog, tempdf$LTVGroup, mean, na.rm = TRUE)
+by(tempdf$ViewsLog, tempdf$LTVGroup, sd, na.rm = TRUE)
 
 
 ## Bartlett’s test for equal variances:
 
-bartlett.test(ViewsLog ~ LTVGroup, data = finaldf)
+bartlett.test(ViewsLog ~ LTVGroup, data = tempdf)
 
 
 ## 6.3.3 Checking Normality
 
-moments::skewness(finaldf$ViewsLog, na.rm = TRUE)
-moments::kurtosis(finaldf$ViewsLog, na.rm = TRUE)
-ggpubr::ggdensity(finaldf$ViewsLog, fill = "lightgray")
-ggpubr::ggqqplot(finaldf$ViewsLog)
+moments::skewness(tempdf$ViewsLog, na.rm = TRUE)
+moments::kurtosis(tempdf$ViewsLog, na.rm = TRUE)
+ggpubr::ggdensity(tempdf$ViewsLog, fill = "lightgray")
+ggpubr::ggqqplot(tempdf$ViewsLog)
 
 # 6.4 The analysis of variance and effect size (eta-squared)
 
-object1 <- aov(ViewsLog ~ LTVGroup, data = finaldf)
+object1 <- aov(ViewsLog ~ LTVGroup, data = tempdf)
 summary(object1)
 DescTools::EtaSq(object1, type = 2, anova = FALSE)
 p_value <- pf(149.6, 4, 8387, lower.tail = FALSE)
@@ -90,7 +97,7 @@ print(p_value)
 ## Conducting follow-up pairwise t-tests (Bonferroni):
 
 # 1. Create a clean dataframe with no missing values in the columns of interest.
-finaldft <- finaldf[complete.cases(finaldf[, c("ViewsLog", "LTVGroup")]), ]
+finaldft <- tempdf[complete.cases(tempdf[, c("ViewsLog", "LTVGroup")]), ]
 
 # 2. Call the function using the x and g arguments from that clean dataframe.
 pairwise.t.test(
@@ -98,13 +105,13 @@ pairwise.t.test(
   g = finaldft$LTVGroup,
   p.adj = "bonferroni"
 )
-
-object <- Rmisc::summarySE(finaldf, measurevar = "ViewsLog", groupvars = c("LTVGroup"), na.rm = TRUE)
+  
+object <- Rmisc::summarySE(tempdf, measurevar = "ViewsLog", groupvars = c("LTVGroup"), na.rm = TRUE)
 ggplot2::ggplot(object, aes(x = factor(LTVGroup), y = ViewsLog)) +
   geom_bar(stat = "Identity", fill = "gray", width = 0.8) +
   geom_errorbar(aes(ymin = ViewsLog - se, ymax = ViewsLog + se), width = .2, color = "black") +
   xlab("LTVGroup") + ylab("ViewsLog") + scale_x_discrete(breaks =
-                                                                                      c("1", "2", "3"), labels = c("category 1 label", "category 2 label", "category 3
+                                                           c("1", "2", "3"), labels = c("category 1 label", "category 2 label", "category 3
     label")) 
 
 
@@ -112,35 +119,35 @@ ggplot2::ggplot(object, aes(x = factor(LTVGroup), y = ViewsLog)) +
 
 #ViewsLog and CommentsGroup
 
-class(finaldf$CommentsGroup)  
+class(tempdf$CommentsGroup)  
 
 # 6.3 Checking data for violations of assumptions
 
 ## 6.3.1 Group sizes
 
-table(finaldf$CommentsGroup)
+table(tempdf$CommentsGroup)
 
 #other in CommentsGroup is filtered out
 ## 6.3.2 Checking Equal Variances 
-by(finaldf$ViewsLog, finaldf$CommentsGroup, mean, na.rm = TRUE)
-by(finaldf$ViewsLog, finaldf$CommentsGroup, sd, na.rm = TRUE)
+by(tempdf$ViewsLog, tempdf$CommentsGroup, mean, na.rm = TRUE)
+by(tempdf$ViewsLog, tempdf$CommentsGroup, sd, na.rm = TRUE)
 
 
 ## Bartlett’s test for equal variances:
 
-bartlett.test(ViewsLog ~ CommentsGroup, data = finaldf)
+bartlett.test(ViewsLog ~ CommentsGroup, data = tempdf)
 
 
 ## 6.3.3 Checking Normality
 
-moments::skewness(finaldf$ViewsLog, na.rm = TRUE)
-moments::kurtosis(finaldf$ViewsLog, na.rm = TRUE)
-ggpubr::ggdensity(finaldf$ViewsLog, fill = "lightgray")
-ggpubr::ggqqplot(finaldf$ViewsLog)
+moments::skewness(tempdf$ViewsLog, na.rm = TRUE)
+moments::kurtosis(tempdf$ViewsLog, na.rm = TRUE)
+ggpubr::ggdensity(tempdf$ViewsLog, fill = "lightgray")
+ggpubr::ggqqplot(tempdf$ViewsLog)
 
 # 6.4 The analysis of variance and effect size (eta-squared)
 
-object1 <- aov(ViewsLog ~ CommentsGroup, data = finaldf)
+object1 <- aov(ViewsLog ~ CommentsGroup, data = tempdf)
 summary(object1)
 DescTools::EtaSq(object1, type = 2, anova = FALSE)
 p_value <- pf(1886, 4, 8387, lower.tail = FALSE)
@@ -148,8 +155,8 @@ print(p_value)
 
 ## Conducting follow-up pairwise t-tests (Bonferroni):
 pairwise.t.test(
-  finaldf$ViewsLog[complete.cases(finaldf$ViewsLog, finaldf$CommentsGroup)],
-  finaldf$CommentsGroup[complete.cases(finaldf$ViewsLog, finaldf$CommentsGroup)],
+  tempdf$ViewsLog[complete.cases(tempdf$ViewsLog, tempdf$CommentsGroup)],
+  tempdf$CommentsGroup[complete.cases(tempdf$ViewsLog, tempdf$CommentsGroup)],
   p.adj = "bonferroni"
 )
 
@@ -157,35 +164,35 @@ pairwise.t.test(
 
 #ViewsLog and CTVGroup
 
-class(finaldf$CTVGroup)  
+class(tempdf$CTVGroup)  
 
 # 6.3 Checking data for violations of assumptions
 
 ## 6.3.1 Group sizes
 
-table(finaldf$CTVGroup)
+table(tempdf$CTVGroup)
 
 #other in CTVGroup is filtered out
 ## 6.3.2 Checking Equal Variances 
-by(finaldf$ViewsLog, finaldf$CTVGroup, mean, na.rm = TRUE)
-by(finaldf$ViewsLog, finaldf$CTVGroup, sd, na.rm = TRUE)
+by(tempdf$ViewsLog, tempdf$CTVGroup, mean, na.rm = TRUE)
+by(tempdf$ViewsLog, tempdf$CTVGroup, sd, na.rm = TRUE)
 
 
 ## Bartlett’s test for equal variances:
 
-bartlett.test(ViewsLog ~ CTVGroup, data = finaldf)
+bartlett.test(ViewsLog ~ CTVGroup, data = tempdf)
 
 
 ## 6.3.3 Checking Normality
 
-moments::skewness(finaldf$ViewsLog, na.rm = TRUE)
-moments::kurtosis(finaldf$ViewsLog, na.rm = TRUE)
-ggpubr::ggdensity(finaldf$ViewsLog, fill = "lightgray")
-ggpubr::ggqqplot(finaldf$ViewsLog)
+moments::skewness(tempdf$ViewsLog, na.rm = TRUE)
+moments::kurtosis(tempdf$ViewsLog, na.rm = TRUE)
+ggpubr::ggdensity(tempdf$ViewsLog, fill = "lightgray")
+ggpubr::ggqqplot(tempdf$ViewsLog)
 
 # 6.4 The analysis of variance and effect size (eta-squared)
 
-object1 <- aov(ViewsLog ~ CTVGroup, data = finaldf)
+object1 <- aov(ViewsLog ~ CTVGroup, data = tempdf)
 summary(object1)
 DescTools::EtaSq(object1, type = 2, anova = FALSE)
 p_value <- pf(149.6, 4, 8387, lower.tail = FALSE)
@@ -194,8 +201,8 @@ print(p_value)
 ## Conducting follow-up pairwise t-tests (Bonferroni):
 
 pairwise.t.test(
-  finaldf$ViewsLog[complete.cases(finaldf$ViewsLog, finaldf$CTVGroup)],
-  finaldf$CTVGroup[complete.cases(finaldf$ViewsLog, finaldf$CTVGroup)],
+  tempdf$ViewsLog[complete.cases(tempdf$ViewsLog, tempdf$CTVGroup)],
+  tempdf$CTVGroup[complete.cases(tempdf$ViewsLog, tempdf$CTVGroup)],
   p.adj = "bonferroni"
 )
 
@@ -240,9 +247,7 @@ group_vars <- c("LTVGroup", "CommentsGroup", "CTVGroup")
 # Loop over categories and variables
 for (cat_name in categories) {
   for (grp in group_vars) {
-    run_anova_pairwise(finaldf, cat_name, grp)
+    run_anova_pairwise(tempdf, cat_name, grp)
   }
 }
-
-
 

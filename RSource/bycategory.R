@@ -13,6 +13,8 @@ ggplot(category_LTV, aes(x = Category, y = Value)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+
+
 #Comments by category
 ggplot(category_Comments, aes(x = Category, y = Value)) +
   geom_bar(stat = "identity", position = "dodge", color = "black") +

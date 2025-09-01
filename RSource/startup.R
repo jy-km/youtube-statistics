@@ -12,6 +12,8 @@ library(ggpubr)
 library(gtsummary)
 library(table1)
 library(purrr)
+library(plotly)
+library(htmlwidgets)
 finaldf <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf.csv")
 
 
@@ -58,6 +60,7 @@ finaldf <- finaldf %>%
       TRUE                       ~ "Other"
     )
   )
+
 
 # LTVGroup factoring
 finaldf <- finaldf %>% 

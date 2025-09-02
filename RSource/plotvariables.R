@@ -39,15 +39,16 @@ gg <- finaldf %>%
 saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/CommentsDistribution.html")
 
 
-#LTV Filtered & log-transformed
+#LTV Filtered
 gg <- finaldf %>%
-  filter(LTV >= 0 & LTV <= 40) %>%
+  filter(LTV >= 0 & LTV <= 1) %>%
   ggplot(aes(x = LTV)) +
-  geom_histogram(binwidth = 1, color = "black", fill = "skyblue") +
+  geom_histogram(binwidth = 0.05, color = "black", fill = "skyblue") +
   scale_x_continuous(labels = scales::comma) +
-  labs(title = "LTV Distribution", x = "LTV", y = "Count") +
+  labs(title = "LTV % Distribution (LTV >= 0 & LTV <= 1)", x = "LTV", y = "Count") +
   theme_minimal()
 
+print(gg)
 saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/LTVDistribution.html")
 
 #Category 
@@ -66,11 +67,11 @@ gg <- finaldf %>%
   labs(title = "CTV Distribution (filtered, binwidth = 0.00001)", x = "CTV", y = "Count") +
   theme_minimal()
 
-saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/VideosCommentsGroup.html")
+saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/CTVDistribution.html")
 
 
 #LTV vs views
-finaldf %>%
+gg <- finaldf %>%
   filter(Views > 0 & Views <= 1e6, LTV <= 20) %>%
   ggplot(aes(x = Views, y = LTV)) +
   geom_point(alpha = 0.5, color = "darkgreen") +
@@ -78,8 +79,10 @@ finaldf %>%
   scale_x_continuous(labels = scales::comma) +
   theme_minimal()
 
+saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/LTVViews.html")
+
 #LTV vs comments plot
-finaldf %>%
+gg <- finaldf %>%
   filter(Comments <= 100000, LTV <= 20) %>%
   ggplot(aes(x = LTV, y = Comments)) +
   geom_point(alpha = 0.5, color = "darkgreen") +
@@ -87,15 +90,18 @@ finaldf %>%
   scale_x_continuous(labels = scales::comma) +
   theme_minimal()
 
+saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/CommentsLTV.html")
+
 #LTV vs Views scatterplot TOTAL
-finaldf %>%
+gg <- finaldf %>%
   filter(Views <= 100000000, LTV <= 100) %>%
   ggplot(aes(x = LTV, y = Views)) +
   geom_point(alpha = 0.6, color = "darkblue") +
   scale_y_continuous(labels = scales::comma) +
-  labs(title = "LTV vs Views", x = "Likes-to-Views Ratio (LTV)", y = "Views") +
+  labs(title = "LTV vs Views", x = "Likes-to-Views Ratio (LTV), (%)", y = "Views") +
   theme_minimal()
 
+saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/LTVViews.html")
 
 
 source("C:/Users/jaeyo/Downloads/youtube-statistics/RSource/startup.R")

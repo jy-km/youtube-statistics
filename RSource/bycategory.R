@@ -6,6 +6,7 @@ ggplot(category_summary, aes(x = Category, y = Value, fill = Metric)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+
 #LTV by category
 ggplot(category_LTV, aes(x = Category, y = Value)) +
   geom_bar(stat = "identity", position = "dodge", color = "black") +

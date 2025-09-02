@@ -22,6 +22,8 @@ finaldf$CTV <- as.numeric(finaldf$CTV)
 finaldf$Comments <- as.numeric(finaldf$Comments)
 finaldf$Views <- as.numeric(finaldf$Views)
   
+
+#error
 category_summary <- finaldf %>%
   group_by(Category) %>%
   summarise(
@@ -56,8 +58,7 @@ finaldf <- finaldf %>%
       LTV > 0     & LTV <= 0.015 ~ "0~0.015 LTV",
       LTV > 0.015 & LTV <= 0.03  ~ "0.015~0.03 LTV",
       LTV > 0.03  & LTV <= 0.06  ~ "0.03~0.06 LTV",
-      LTV > 0.06  & LTV <= 1     ~ "0.06~ LTV",
-      TRUE                       ~ "Other"
+      LTV > 0.06  & LTV <= 1     ~ "0.06~ LTV"
     )
   )
 
@@ -93,7 +94,6 @@ finaldf <- finaldf %>%
     )
   )
 
-
 # DurationGroup grouping
 finaldf <- finaldf %>% 
   mutate(
@@ -121,29 +121,6 @@ finaldf <- finaldf %>%
     )
   )
 
-
-# CTVGroup grouping WIP
-finaldf <- finaldf %>% 
-  mutate(
-    CTVGroup = case_when(
-      CTV >= 1   & Diff <= 6    ~ "<1 week",
-      Diff >= 7   & Diff <= 121  ~ "≥1 week, <3 months",
-      Diff >= 122 & Diff <= 730  ~ "≥3 months, <2 years",
-      Diff >= 731 & Diff <= 919  ~ "≥2 years",
-      TRUE                       ~ "Other"
-    )
-  )
-
-# CTVGroup factoring
-finaldf <- finaldf %>% 
-  mutate(
-    CTVGroup = factor(
-      CTVGroup,
-      levels = c("<1 week", "≥1 week, <3 months", "≥3 months, <2 years", "≥2 years", "Other")
-    )
-  )
-
-
 finaldf <- finaldf %>%
   mutate(
     CommentsGroup = factor(
@@ -168,36 +145,6 @@ finaldf <- finaldf %>%
 
 finaldf$CTV <- (finaldf$CTV * 10) #x1000
 
+finaldf$LTV <- (finaldf$LTV / 100) #percentage -> raw ratio
 
-
-dat <- expand.grid(id=1:10, sex=c("Male", "Female"), treat=c("Treated", "Placebo"))
-dat$age <- runif(nrow(dat), 10, 50)
-dat$age[3] <- NA  # Add a missing value
-dat$wt <- exp(rnorm(nrow(dat), log(70), 0.2))
-
-label(dat$sex) <- "Sex"
-label(dat$age) <- "Age"
-label(dat$treat) <- "Treatment Group"
-label(dat$wt) <- "Weight"
-
-units(dat$age) <- "years"
-units(dat$wt) <- "kg"
-
-# basic table 1
-tab1_html<- table1(~ sex + age + wt | treat, data=dat)
-tab1_df <- as.data.frame(tab1html)
-
-
-#finish anova and t-tests
-
-#multivariable models after
-#upload to drive
-
-
-#Views Filtered & log-transformed
-mutate(log_CTV) = log10(finaldf$CTV)
-ggplot(aes(x = finaldf$log_CTV)) +
-geom_histogram(binwidth = 0.0001, color = "black", fill = "skyblue") +
-labs(title = "CTV Distribution", x = "CTV", y = "Count") +
-theme_minimal()
 

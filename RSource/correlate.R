@@ -49,7 +49,9 @@ t.test(
   var.equal = FALSE
 )
 
-#Also, plot the bivariate relationships using bar charts.  In each chart, there is a bar for each category and the height of the bar is average log[view].   See the example codes for barcharts in 7.3.2 in the ebook above link, but you can use other examples that you like. 
+
+
+
 
 #ViewsLog and LTVGroup
 
@@ -153,6 +155,13 @@ pairwise.t.test(
   p.adj = "bonferroni"
 )
 
+object <- Rmisc::summarySE(finaldf, measurevar = "CommentsGroup", groupvars = c("ViewsLog"), na.rm = TRUE)
+ggplot2::ggplot(object, aes(x = factor(CommentsGroup), y = ViewsLog)) +
+  geom_bar(stat = "Identity", fill = "gray", width = 0.8) +
+  geom_errorbar(aes(ymin = CommentsGroup - se, ymax = ViewsLog + se), width = .2, color = "black") +
+  xlab("CommentsGroup") + ylab("ViewsLog") + scale_x_discrete(breaks =
+                                                           c("1", "2", "3"), labels = c("category 1 label", "category 2 label", "category 3
+    label")) 
 
 
 #ViewsLog and CTVGroup

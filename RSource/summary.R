@@ -1,3 +1,9 @@
+
+print(summary(finaldf))
+dfsummary <- summary(finaldf)
+
+write.csv(dfsummary, "C:/Users/jaeyo/Downloads/youtube-statistics/summary.csv")
+
 #Standard cont variables
 subject_list_1 <- c("Views", "Likes", "Diff", "CTV", "Duration")
 

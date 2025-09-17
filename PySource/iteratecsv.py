@@ -2,7 +2,7 @@ import csv
 import os
 
 def removedup():
-    input_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf.csv'
+    input_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/truedf.csv'
     temp_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf_temp.csv'
 
     seen_ids = set()
@@ -26,7 +26,7 @@ def removedup():
 
     print(f"File cleaned. {len(seen_ids)} unique rows kept.")
 
-# removedup()
+#removedup()
 
 def writecsv(templist):
     out_path = "C:/Users/jaeyo/Downloads/youtube-statistics/CSV/videoage.csv"
@@ -55,7 +55,7 @@ def videoage():
 
     writecsv(templist)
 
-# videoage()
+videoage()
 
 def onlypos():
     input_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf.csv'
@@ -70,7 +70,7 @@ def onlypos():
         writer.writerow(header)
 
         for row in reader:
-            if row[2] != '0' and row[3] != '0':
+            if row[2] != '0':
                 writer.writerow(row)  
 
     os.replace(temp_path, input_path)

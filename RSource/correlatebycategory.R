@@ -220,7 +220,7 @@ run_anova_pairwise <- function(data, category_name, group_var) {
   df_cat <- df_cat[complete.cases(df_cat$ViewsLog, df_cat[[group_var]]), ]
   
   cat("\n===== Category:", category_name, "| Group variable:", group_var, "=====\n")
-  
+    
   # Dynamically create formula
   formula_obj <- as.formula(paste("ViewsLog ~", group_var))
   

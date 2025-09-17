@@ -14,7 +14,7 @@ library(table1)
 library(purrr)
 library(plotly)
 library(htmlwidgets)
-finaldf <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf.csv")
+finaldf <- read.csv("C:/Users/jaeyo/Downloads/youtube-statistics/CSV/truedf.csv")
 
 
 finaldf$LTV <- as.numeric(finaldf$LTV)
@@ -58,7 +58,8 @@ finaldf <- finaldf %>%
       LTV > 0     & LTV <= 0.015 ~ "0~0.015 LTV",
       LTV > 0.015 & LTV <= 0.03  ~ "0.015~0.03 LTV",
       LTV > 0.03  & LTV <= 0.06  ~ "0.03~0.06 LTV",
-      LTV > 0.06  & LTV <= 1     ~ "0.06~ LTV"
+      LTV > 0.06 ~ "0.06~ LTV",
+      TRUE ~ "Likes = 0"
     )
   )
 
@@ -68,7 +69,7 @@ finaldf <- finaldf %>%
   mutate(
     LTVGroup = factor(
       LTVGroup,
-      levels = c("0~0.015 LTV", "0.015~0.03 LTV", "0.03~0.06 LTV", "0.06~ LTV", "Other")
+      levels = c("0~0.015 LTV", "0.015~0.03 LTV", "0.03~0.06 LTV", "0.06~ LTV", "Likes = 0")
     )
   )
 
@@ -77,11 +78,10 @@ finaldf <- finaldf %>%
 finaldf <- finaldf %>% 
   mutate(
     DiffGroup = case_when(
-      Diff >= 1   & Diff <= 6    ~ "<1 week",
+      Diff >= 0   & Diff <= 6    ~ "<1 week",
       Diff >= 7   & Diff <= 121  ~ "≥1 week, <3 months",
       Diff >= 122 & Diff <= 730  ~ "≥3 months, <2 years",
       Diff >= 731 & Diff <= 919  ~ "≥2 years",
-      TRUE                       ~ "Other"
     )
   )
 
@@ -90,7 +90,7 @@ finaldf <- finaldf %>%
   mutate(
     DiffGroup = factor(
       DiffGroup,
-      levels = c("<1 week", "≥1 week, <3 months", "≥3 months, <2 years", "≥2 years", "Other")
+      levels = c("<1 week", "≥1 week, <3 months", "≥3 months, <2 years", "≥2 years")
     )
   )
 
@@ -102,7 +102,6 @@ finaldf <- finaldf %>%
       Duration >= 61   & Duration <= 900   ~ "1–15 min (61 ≤ t ≤ 900 sec)",
       Duration >= 901  & Duration <= 3600  ~ "15–60 min (901 ≤ t ≤ 3600 sec)",
       Duration >= 3601                     ~ "60min~ (3601 ≤ t sec)",
-      TRUE                                 ~ "Other"
     )
   )
 
@@ -115,9 +114,8 @@ finaldf <- finaldf %>%
         "0–1 min (0 ≤ t ≤ 60 sec)",
         "1–15 min (61 ≤ t ≤ 900 sec)",
         "15–60 min (901 ≤ t ≤ 3600 sec)",
-        "60min~ (3601 ≤ t sec)",
-        "Other"
-      )
+        "60min~ (3601 ≤ t sec)"
+        )
     )
   )
 

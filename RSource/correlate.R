@@ -1,11 +1,12 @@
 #Views vs LTV (overall)
 #Pearson
-cor(
-  finaldf$log_Views[finaldf$Views > 0 & finaldf$LTV > 0],
-  finaldf$log_LTV[finaldf$Views > 0 & finaldf$LTV > 0],
+pearson <- cor(
+  finaldf$ViewsLog[finaldf$Views > 0 & finaldf$LTV > 0],
+  finaldf$LikesLog[finaldf$Views > 0 & finaldf$LTV > 0],
   method = "pearson"
 )
 
+print(pearson)
 #graph
 finaldf %>%
   filter(Views > 0, LTV > 0) %>%

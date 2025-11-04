@@ -31,29 +31,6 @@ cor(
 
 
 
-#Comments vs LTV (overall) 
-t.test(finaldf$Comments, finaldf$LTV, var.equal = FALSE)
-
-#Comments vs LTV , by category
-t.test(
-  finaldf$Comments[finaldf$Category=="Entertainment"],
-  finaldf$LTV[finaldf$Category=="Entertainment"]
-)
-
-#Views vs Comments (overall)
-t.test(finaldf$Views, finaldf$Comments, var.equal = FALSE)
-
-#Views vs Comments, by category 
-t.test(
-  finaldf$Views[finaldf$Category=="Entertainment"],
-  finaldf$Comments[finaldf$Category=="Entertainment"],
-  var.equal = FALSE
-)
-
-
-
-
-
 #ViewsLog and LTVGroup
 
 class(finaldf$LTVGroup)  

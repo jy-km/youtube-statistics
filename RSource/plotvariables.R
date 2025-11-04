@@ -40,15 +40,14 @@ gg <- ggplot(finaldf, aes(x = Category, fill = Category)) +
 
 saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/CategoryDistribution.html")
 
-#LTV vs Views scatterplot TOTAL
-gg <- finaldf %>%
-  filter(Views <= 100000000, LTV <= 100) %>%
-  ggplot(aes(x = LTV, y = Views)) +
-  geom_point(alpha = 0.6, color = "darkblue") +
-  scale_y_continuous(labels = scales::comma) +
-  labs(title = "LTV vs Views", x = "Likes-to-Views Ratio (LTV), (%)", y = "Views") +
-  theme_minimal()
+#LTV vs Views bar chart
+gg <- ggplot(finaldf, aes(x = LTVGroup, fill = LTVGroup)) +
+  geom_bar(color = "black") +
+  labs(title = "Log-transformed Views Across LTV Categories", x = "Likes-To-Views Categories", y = "Log-transformed Views") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 17))
 
+print(gg)
 saveWidget(ggplotly(gg), file = "C:/Users/jaeyo/Downloads/youtube-statistics/graphs/LTVViews.html")
 
 

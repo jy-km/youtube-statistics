@@ -30,17 +30,23 @@ category_LTV <- finaldf %>%
   pivot_longer(cols = c(median_LTV), names_to = "Metric", values_to = "Value") %>%
   ungroup()
 
+category_summary <- finaldf %>%
+  group_by(Category) %>%
+  summarise(
+    median_LTV = median(LTV, na.rm = TRUE),
+    median_Comments = median(Comments, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(median_LTV, median_Comments), names_to = "Metric", values_to = "Value") %>%
+  mutate(Metric = recode(Metric, median_LTV = "LTV", median_Comments = "Comments"))
 
 # LTVGroup grouping
 finaldf <- finaldf %>% 
   mutate(
-    LikesZero = if_else(LTV == 0, TRUE, FALSE),
-    
     LTVGroup = case_when(
       LTV > 0     & LTV <= 0.015 ~ "0~0.015 LTV",
       LTV > 0.015 & LTV <= 0.03  ~ "0.015~0.03 LTV",
       LTV > 0.03  & LTV <= 0.06  ~ "0.03~0.06 LTV",
-      LTV > 0.06 ~ "0.06~1 LTV",
+      LTV > 0.06 ~ "0.06~1 LTV"
     )
   )
 

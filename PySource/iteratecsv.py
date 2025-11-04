@@ -55,12 +55,12 @@ def videoage():
 
     writecsv(templist)
 
-videoage()
+#videoage()
 
 def onlypos():
-    input_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldf.csv'
+    input_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/truedf.csv'
     temp_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/finaldftemp.csv'
-
+    result_path = 'C:/Users/jaeyo/Downloads/youtube-statistics/CSV/nozero.csv'
     with open(input_path, 'r', encoding='utf-8') as infile, \
         open(temp_path, 'w', newline='', encoding='utf-8') as outfile:
         reader = csv.reader(infile)
@@ -73,9 +73,9 @@ def onlypos():
             if row[2] != '0':
                 writer.writerow(row)  
 
-    os.replace(temp_path, input_path)
+    os.replace(temp_path, result_path)
     print('Sucessfully done')
 
-#onlypos()  
+onlypos()  
 
 #def s 

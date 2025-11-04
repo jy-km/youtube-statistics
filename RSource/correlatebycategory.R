@@ -256,7 +256,7 @@ for (cat_name in categories) {
 
 
 labs(title="ANOVA results between LTV Group and Log10 Views",x="LTV Group", y="Log10 Views")+
-  title = "Log10(Views) by Comments Group for Each Age Category",
+title = "Log10(Views) by Comments Group for Each Age Category",
 title = "Log10(Views) by Comments Group for Each Video Category",
 title = "Log10(Views) by LTV Group for Each Age Category",
 title = "Log10(Views) by Comments Group for Each Age Category",

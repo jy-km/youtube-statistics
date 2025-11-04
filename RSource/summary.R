@@ -23,7 +23,7 @@ summary_results <- generate_summary_files(
 
 # You can now view the results directly
 print(summary_results$cont)
-print(summary_results$cat)
+
 
 
 generate_summary_files <- function(data, contvar, contvar_filt, catvar, output_prefix = "summary") {

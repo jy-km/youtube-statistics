@@ -1,6 +1,0 @@
-#views: Log-transform continuous
-#comments: log-transform continuous
-LTV ratio: log-transform continuous
-Video age: continuous (단위보다 daily로 나눠서 사용, 필요할 때 categorial로 다시 만들 수 있음)
-Video category:  Categorical 
-Video duration: continuous (초 단위로 변환 후 사용)

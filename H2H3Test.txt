@@ -1,0 +1,133 @@
+
+Category: AutosVehicles 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  165.2   41.30   31.18 <2e-16 ***
+Residuals   507  671.5    1.32                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: Comedy 
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+LTVGroup      4  137.9   34.47   16.18 1.86e-12 ***
+Residuals   489 1041.4    2.13                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: Education 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  183.1   45.78   25.55 <2e-16 ***
+Residuals   557  997.9    1.79                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: Entertainment 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  436.8  109.20   49.17 <2e-16 ***
+Residuals   547 1214.8    2.22                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: FilmAnimation 
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+LTVGroup      4  127.5   31.88    19.5 6.23e-15 ***
+Residuals   503  822.4    1.63                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: Gaming 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  696.7  174.18    88.1 <2e-16 ***
+Residuals   664 1312.8    1.98                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: HowtoStyle 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  219.9   54.97   34.84 <2e-16 ***
+Residuals   610  962.6    1.58                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: Music 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  234.1   58.52   32.05 <2e-16 ***
+Residuals   601 1097.5    1.83                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: NewsPolitics 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  172.2   43.06   24.96 <2e-16 ***
+Residuals   591 1019.6    1.73                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: NonprofitsActivism 
+             Df Sum Sq Mean Sq F value  Pr(>F)    
+LTVGroup      4  106.7  26.664   18.53 3.4e-14 ***
+Residuals   492  708.1   1.439                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: PeopleBlogs 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  298.1   74.52   34.81 <2e-16 ***
+Residuals   579 1239.5    2.14                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: PetsAnimals 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4    388   96.99   53.74 <2e-16 ***
+Residuals   576   1040    1.80                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: ScienceTech 
+             Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup      4  144.8   36.21   23.95 <2e-16 ***
+Residuals   572  864.8    1.51                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: Sports 
+             Df Sum Sq Mean Sq F value  Pr(>F)    
+LTVGroup      4   61.3  15.328   11.55 4.7e-09 ***
+Residuals   634  841.6   1.327                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: TravelEvents 
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+LTVGroup      4  120.8  30.206    18.1 4.55e-14 ***
+Residuals   615 1026.2   1.669                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: About 1 day (0-6 days) 
+              Df Sum Sq Mean Sq F value   Pr(>F)    
+LTVGroup       4   37.8   9.450   17.22 5.37e-14 ***
+Residuals   3513 1928.1   0.549                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: About 1 month (7-121 days) 
+              Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup       4   1182  295.62   137.2 <2e-16 ***
+Residuals   1462   3149    2.15                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: About 1 year (122-730 days) 
+              Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup       4   1106  276.56   151.1 <2e-16 ***
+Residuals   1867   3416    1.83                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Category: ≥2 years (731-919 days) 
+              Df Sum Sq Mean Sq F value Pr(>F)    
+LTVGroup       4    845   211.1   70.27 <2e-16 ***
+Residuals   1750   5258     3.0                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
